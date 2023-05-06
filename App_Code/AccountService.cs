@@ -69,7 +69,6 @@ namespace WebServiceBit.App_Code
             }
             return (string)obj;
         }
-
         public string GetPhoneNumber(string username, string pass)
         {
             OleDbCommand myCommand = new OleDbCommand("GetAccountByUserNameAndPass", myConnection);
@@ -124,7 +123,7 @@ namespace WebServiceBit.App_Code
             }
             return dataset;
         }
-        public void InsertTransaction(string phoneNumberPay, string payee, decimal amount, DateTime datePosted, string transactionStatus, string phoneNumberGet)
+        public void InsertTransaction(TransactionDetails transactionDetails)
         {
             OleDbCommand myCommand = new OleDbCommand("InsertNewTransaction", myConnection);
             myCommand.CommandType = CommandType.StoredProcedure;
@@ -133,27 +132,27 @@ namespace WebServiceBit.App_Code
 
             objParam = myCommand.Parameters.Add("@DatePosted", OleDbType.DBDate);
             objParam.Direction = ParameterDirection.Input;
-            objParam.Value = datePosted;
+            objParam.Value = transactionDetails.DatePosted;
 
             objParam = myCommand.Parameters.Add("@amount", OleDbType.Decimal);
             objParam.Direction = ParameterDirection.Input;
-            objParam.Value = amount;
+            objParam.Value = transactionDetails.Amount;
 
             objParam = myCommand.Parameters.Add("@payee", OleDbType.BSTR);
             objParam.Direction = System.Data.ParameterDirection.Input;
-            objParam.Value = payee;
+            objParam.Value = transactionDetails.Payee;
 
             objParam = myCommand.Parameters.Add("@PhonePayMoney", OleDbType.BSTR);
             objParam.Direction = ParameterDirection.Input;
-            objParam.Value = phoneNumberPay;
+            objParam.Value = transactionDetails.PhonePayMoney;
 
             objParam = myCommand.Parameters.Add("@TransactionStatus", OleDbType.BSTR);
             objParam.Direction = ParameterDirection.Input;
-            objParam.Value = transactionStatus;
+            objParam.Value = transactionDetails.TransactionStatus;
 
             objParam = myCommand.Parameters.Add("@PhoneGetMoney", OleDbType.BSTR);
             objParam.Direction = ParameterDirection.Input;
-            objParam.Value = phoneNumberGet;
+            objParam.Value = transactionDetails.PhoneGetMoney;
 
 
             try
@@ -189,15 +188,15 @@ namespace WebServiceBit.App_Code
                 throw;
             }
         }
-        public void PayThatBill(string phoneNumberPay, decimal newbalancePay, string payee, decimal amount, DateTime datePosted, string transactionStatus, string phoneNumberGet, Decimal newbalanceGet)
+        public void PayThatBill(TransactionDetails transactionDetails, int newbalancePay, int newbalanceGet)
         {
             try
             {
                 myConnection.Open();
                 objTransaction = myConnection.BeginTransaction();
-                this.UpdateBalance(phoneNumberPay, newbalancePay);
-                this.UpdateBalance(phoneNumberGet, newbalanceGet);
-                this.InsertTransaction(phoneNumberPay, payee, amount, datePosted, transactionStatus, phoneNumberGet);
+                this.UpdateBalance(transactionDetails.PhonePayMoney, newbalancePay);
+                this.UpdateBalance(transactionDetails.PhoneGetMoney, newbalanceGet);
+                this.InsertTransaction(transactionDetails);
                 objTransaction.Commit();
             }
             catch (Exception ex)
