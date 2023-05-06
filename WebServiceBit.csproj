@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="App_Code\AccountService.cs" />
     <Compile Include="App_Code\Connect.cs" />
+    <Compile Include="App_Code\TransactionDetails.cs" />
     <Compile Include="App_Code\UserDetails.cs" />
     <Compile Include="App_Code\UserService.cs" />
     <Compile Include="BankService.asmx.cs">
