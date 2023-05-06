@@ -11,7 +11,7 @@ namespace WebServiceBit.App_Code
     {
         private int _transactionID;
         private DateTime _datePosted;
-        private int _amount;
+        private Decimal _amount;
         private string _payee;
         private string _phonePayMoney;
         private string _transactionStatus;
@@ -27,7 +27,7 @@ namespace WebServiceBit.App_Code
             get { return this._datePosted; }
             set { this._datePosted = value; }
         }
-        public int Amount
+        public Decimal Amount
         {
             get { return this._amount; }
             set { this._amount = value; }
@@ -58,10 +58,10 @@ namespace WebServiceBit.App_Code
 
         }
 
-        public TransactionDetails(int transactionID, DateTime dateposted, int amount, string payee, string phonePayMoney, string transactionStatus, string phoneGetMoney)
+        public TransactionDetails(int transactionID, Decimal amount, string payee, string phonePayMoney, string transactionStatus, string phoneGetMoney)
         {
             this._transactionID = transactionID;
-            this._datePosted = dateposted;
+            this._datePosted = DateTime.Now;
             this._amount = amount;
             this._payee = payee;
             this._phonePayMoney = phonePayMoney;
