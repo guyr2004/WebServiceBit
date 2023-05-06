@@ -27,19 +27,28 @@ namespace WebServiceBit
         }
 
         [WebMethod]
-        public string PostBillService(string phoneNumberPay, string payee, decimal amount, string phoneNumberGet)
+        public TransactionDetails GetTransaction()
+        {
+            TransactionDetails transactionDetails = new TransactionDetails();
+            return transactionDetails;
+        }
+
+        [WebMethod]
+        public string PostBillService(TransactionDetails transactionDetails, Decimal amount)
         {
             AccountService accountService = new AccountService();
             try
             {
-                Decimal balancePay = accountService.GetBalance(phoneNumberPay);
-                Decimal balanceGet = accountService.GetBalance(phoneNumberGet);
+                Decimal balancePay = accountService.GetBalance(transactionDetails.PhonePayMoney);
+                Decimal balanceGet = accountService.GetBalance(transactionDetails.PhoneGetMoney);
                 if (amount <= balancePay)
                 {
                     Decimal newbalancePay = balancePay - amount;
                     Decimal newbalanceGet = balanceGet + amount;
-                    string transactionStatus = "מאושר";
-                    accountService.PayThatBill(phoneNumberPay, newbalancePay, payee, amount, DateTime.Now, transactionStatus, phoneNumberGet, newbalanceGet);
+                    transactionDetails.TransactionStatus = "מאושר";
+                    transactionDetails.DatePosted = DateTime.Now;
+                    transactionDetails.Amount = amount;
+                    accountService.PayThatBill(transactionDetails, newbalancePay, newbalanceGet);
                     return "success";
                 }
                 else
