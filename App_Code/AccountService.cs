@@ -154,7 +154,6 @@ namespace WebServiceBit.App_Code
             objParam.Direction = ParameterDirection.Input;
             objParam.Value = transactionDetails.PhoneGetMoney;
 
-
             try
             {
                  myCommand.ExecuteNonQuery();
@@ -188,7 +187,7 @@ namespace WebServiceBit.App_Code
                 throw;
             }
         }
-        public void PayThatBill(TransactionDetails transactionDetails, int newbalancePay, int newbalanceGet)
+        public void PayThatBill(TransactionDetails transactionDetails, Decimal newbalancePay, Decimal newbalanceGet)
         {
             try
             {
